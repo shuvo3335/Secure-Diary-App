@@ -1,4 +1,4 @@
-## Reflect: Nature-Focused Private Diary
+## Private Diary Application
 Most Diary/Note-Taking apps are cluttered with features that distract from the actual act of writing. 
 **But It** is built to be a "quiet corner" on your device—a minimalist and secure place for daily use.
 
