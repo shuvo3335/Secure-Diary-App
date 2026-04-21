@@ -23,12 +23,9 @@ It’s perfect for anyone who wants a digital diary that feels as safe and perso
 3.  **Review:** Scroll through your timeline. Use the "Show More" toggle to read longer entries without leaving the main screen.
 4.  **Edit/Delete:** Use the menu on any card to update or remove old entries.
 5.  Some ScreenShots will describe more, I think ->
-   ![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234549.png)
-   ![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234711.png)
-   ![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234725.png)
-   ![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234742.png)
-   ![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234816.png)
-
+   ![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234549.png)![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234711.png) ![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234725.png)![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234742.png)
+    ![Image Alt](https://github.com/shuvo3335/Secure-Diary-App/blob/main/Emulator_Screenshot_20260421_234816.png)
+  
 ### As a developer:
 1.  Clone the repository.
 2.  Open in **Android Studio (Ladybug or newer)**.
