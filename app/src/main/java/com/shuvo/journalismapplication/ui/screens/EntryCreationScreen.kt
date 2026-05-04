@@ -17,6 +17,9 @@ import coil.compose.AsyncImage
 import com.shuvo.journalismapplication.ui.viewmodel.JournalViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.compose.ui.tooling.preview.Preview
+import com.shuvo.journalismapplication.data.JournalEntry
+import com.shuvo.journalismapplication.ui.theme.JournalismApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,14 +28,33 @@ fun EntryCreationScreen(
     entryId: Int? = null,
     onBackClick: () -> Unit
 ) {
+    val entries by viewModel.allEntries.collectAsState()
+
+    EntryCreationContent(
+        entries = entries,
+        entryId = entryId,
+        onBackClick = onBackClick,
+        onSaveEntry = { title, content, mood, date, id ->
+            viewModel.saveEntry(title, content, mood, date, id)
+            onBackClick()
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EntryCreationContent(
+    entries: List<JournalEntry>,
+    entryId: Int? = null,
+    onBackClick: () -> Unit,
+    onSaveEntry: (String, String, String, Long, Int) -> Unit
+) {
     var title by rememberSaveable { mutableStateOf("") }
     var content by rememberSaveable { mutableStateOf("") }
     var selectedMood by rememberSaveable { mutableStateOf("Calm") }
     var selectedDate by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
 
-    val entries by viewModel.allEntries.collectAsState()
-
-    LaunchedEffect(entryId) {
+    LaunchedEffect(entryId, entries) {
         if (entryId != null) {
             val entry = entries.find { it.id == entryId }
             entry?.let {
@@ -43,7 +65,7 @@ fun EntryCreationScreen(
             }
         }
     }
-    
+
     val moods = listOf("Important", "Happy", "Sad", "Calm", "Inspired", "Anxious", "Grateful",
         "Excited", "Focused", "Energetic")
     var expanded by remember { mutableStateOf(false) }
@@ -90,8 +112,7 @@ fun EntryCreationScreen(
                     TextButton(
                         onClick = {
                             if (title.isNotBlank() && content.isNotBlank()) {
-                                viewModel.saveEntry(title, content, selectedMood, selectedDate, entryId ?: 0)
-                                onBackClick()
+                                onSaveEntry(title, content, selectedMood, selectedDate, entryId ?: 0)
                             }
                         }
                     ) {
@@ -111,19 +132,6 @@ fun EntryCreationScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-//                item {
-//                    // Header Image - Responsive height
-//                    AsyncImage(
-//                        model = "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1000",
-//                        contentDescription = "Nature Header",
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .heightIn(max = 100.dp)
-//                            .aspectRatio(16f / 9f),
-//                        contentScale = ContentScale.Crop
-//                    )
-//                }
-
                 item {
                     Column(
                         modifier = Modifier.padding(horizontal = 16.dp),
@@ -187,12 +195,45 @@ fun EntryCreationScreen(
                                 .fillMaxWidth()
                                 .heightIn(min = 200.dp)
                         )
-                        
+
                         // Extra spacer to ensure we can scroll past the FAB or bottom of screen
                         Spacer(modifier = Modifier.height(32.dp))
                     }
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EntryCreationScreenPreview() {
+    JournalismApplicationTheme {
+        EntryCreationContent(
+            entries = emptyList(),
+            onBackClick = {},
+            onSaveEntry = { _, _, _, _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EntryCreationScreenEditPreview() {
+    JournalismApplicationTheme {
+        EntryCreationContent(
+            entries = listOf(
+                JournalEntry(
+                    id = 1,
+                    title = "Sample Entry",
+                    content = "This is a sample journal entry content.",
+                    mood = "Happy",
+                    date = System.currentTimeMillis()
+                )
+            ),
+            entryId = 1,
+            onBackClick = {},
+            onSaveEntry = { _, _, _, _, _ -> }
+        )
     }
 }

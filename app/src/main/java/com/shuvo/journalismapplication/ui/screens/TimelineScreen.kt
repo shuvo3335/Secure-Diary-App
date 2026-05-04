@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,6 +21,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.shuvo.journalismapplication.data.JournalEntry
 import com.shuvo.journalismapplication.ui.viewmodel.JournalViewModel
+import androidx.compose.ui.tooling.preview.Preview
+import com.shuvo.journalismapplication.ui.theme.JournalismApplicationTheme
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,6 +37,22 @@ fun TimelineScreen(
     onEditEntryClick: (Int) -> Unit
 ) {
     val entries by viewModel.allEntries.collectAsState()
+    TimelineScreenContent(
+        entries = entries,
+        onAddEntryClick = onAddEntryClick,
+        onEditEntryClick = onEditEntryClick,
+        onDeleteEntryClick = { viewModel.deleteEntry(it) }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TimelineScreenContent(
+    entries: List<JournalEntry>,
+    onAddEntryClick: () -> Unit,
+    onEditEntryClick: (Int) -> Unit,
+    onDeleteEntryClick: (JournalEntry) -> Unit
+) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -89,7 +106,7 @@ fun TimelineScreen(
                             JournalEntryItem(
                                 entry = entry,
                                 onEditClick = { onEditEntryClick(entry.id) },
-                                onDeleteClick = { viewModel.deleteEntry(entry) }
+                                onDeleteClick = { onDeleteEntryClick(entry) }
                             )
                         }
                     }
@@ -209,5 +226,71 @@ fun JournalEntryItem(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TimelineScreenPreview() {
+    JournalismApplicationTheme {
+        TimelineScreenContent(
+            entries = listOf(
+                JournalEntry(
+                    id = 1,
+                    title = "Morning Walk",
+                    date = System.currentTimeMillis(),
+                    content = "Saw a beautiful sunrise today at the park. The weather was perfect for a long walk.",
+                    mood = "Happy"
+                ),
+                JournalEntry(
+                    id = 2,
+                    title = "Coding Session",
+                    date = System.currentTimeMillis() - 86400000,
+                    content = "Worked on the journal app. Learned about Compose Previews and how to extract stateless composables.",
+                    mood = "Productive"
+                ),
+                JournalEntry(
+                    id = 3,
+                    title = "Rainy Day",
+                    date = System.currentTimeMillis() - 172800000,
+                    content = "It rained all day. Perfect for reading a book and sipping some hot cocoa.",
+                    mood = "Cozy"
+                )
+            ),
+            onAddEntryClick = {},
+            onEditEntryClick = {},
+            onDeleteEntryClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TimelineScreenEmptyPreview() {
+    JournalismApplicationTheme {
+        TimelineScreenContent(
+            entries = emptyList(),
+            onAddEntryClick = {},
+            onEditEntryClick = {},
+            onDeleteEntryClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun JournalEntryItemPreview() {
+    JournalismApplicationTheme {
+        JournalEntryItem(
+            entry = JournalEntry(
+                id = 1,
+                title = "Sample Entry",
+                date = System.currentTimeMillis(),
+                content = "This is a sample journal entry content to show how it looks in the list. It can be quite long sometimes.",
+                mood = "Happy"
+            ),
+            onEditClick = {},
+            onDeleteClick = {}
+        )
     }
 }
